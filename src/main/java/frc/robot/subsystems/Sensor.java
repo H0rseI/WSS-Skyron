@@ -17,6 +17,9 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+//import the Servo Library
+
+
 public class Sensor extends SubsystemBase
 {
     //Creates all necessary hardware interface here for sensors
@@ -24,32 +27,44 @@ public class Sensor extends SubsystemBase
 
     // Sensors
     private final DigitalInput input10;
+    private final AnalogInput input22;
+    private final AnalogInput input23;
+    private int i;
 
+    
 
     // Good for debugging
     // Shuffleboard
     private final ShuffleboardTab tab = Shuffleboard.getTab("Sensors");
     private final NetworkTableEntry D_inputDisp = tab.add("inputDisp", 0).getEntry();
+    private NetworkTableEntry D_poopoo = tab.add("icount", 0).getEntry();
+    private final NetworkTableEntry D_IR = tab.add("IR sensor", 0).getEntry();
+    private final NetworkTableEntry D_IR2 = tab.add("IR sensor2", 0).getEntry();
 
     //Subsystem for sensors
     //This is just an example.
     public Sensor() {
         
         input10 = new DigitalInput(10);
-
+        input22 = new AnalogInput(0);
+        input23 = new AnalogInput(1);
+        
     }
 
-    /**
-     * Sets the servo angle
-     * <p>
-     * 
-     * @param degrees degree to set the servo to, range 0° - 300°
-     */
+
+    
+
     public Boolean getSwitch() {
         return input10.get();
     }
 
+    public double getDistance(){
+        return (Math.pow(input22.getAverageVoltage(), -1.2045)) * 27.726;
+    }
 
+    public double getDistance2(){
+        return (Math.pow(input23.getAverageVoltage(), -1.2045)) * 27.726;
+    }
     /**
      * Call for the raw ADC value
      * <p>
@@ -82,6 +97,9 @@ public class Sensor extends SubsystemBase
         //These display is good for debugging but may slow system down.
         //Good to remove unnecessary display during competition
         D_inputDisp.setBoolean(getSwitch());
-
+        D_poopoo.setNumber(i);
+        D_IR.setDouble(getDistance());
+        D_IR2.setDouble(getDistance2());
+        
     }
 }
